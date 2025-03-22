@@ -505,18 +505,18 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|android|ipad|
     //document.getElementById("offline-instructions").innerHTML = 'You can use BeepBox when your device is offline if you put a shortcut to BeepBox on your home screen. <ul><li>Chrome: find the "Add to Home Screen" option in the ⋮ menu.</li><li>Firefox: find the "Add Page Shortcut" option in the ⋮ menu.</li><li>Safari: find the "Add to Home Screen" option in the bookmark menu.</li></ul>';
 }
 function browserHasRequiredFeatures() {
-            "use strict";
-            if (window.AudioContext == undefined && window.webkitAudioContext == undefined) {
-                return false;
-            }
+            //"use strict";
+            //if (window.AudioContext == undefined && window.webkitAudioContext == undefined) {
+            //    return false;
+            //}
 
-            try {
-                eval("class T {}");
-                eval("const a = () => 0");
-                eval("for (const a of []);");
-            } catch (error) {
-                return false;
-            }
+            //try {
+            //    eval("class T {}");
+            //    eval("const a = () => 0");
+            //    eval("for (const a of []);");
+            //} catch (error) {
+            //    return false;
+            //}
 
             return true;
         }
