@@ -166,7 +166,6 @@ function focusthis(e) {
     e.focus();
     console.log("focused text box");
 }
-dragElement(document.getElementById("chatroom"));
 function dragElement(elmnt) {
     var pos1 = 0,
         pos2 = 0,
@@ -391,6 +390,7 @@ function dragElement(elmnt) {
     <script type="text/javascript">
 // Randomize display of header
 // 1-in-10
+dragElement(document.getElementById("chatroom"));
 if (Math.floor(Math.random() * 10) == 0) {
     switch (Math.floor(Math.random() * 4)) {
         case 0:
