@@ -214,6 +214,60 @@ function dragElement(elmnt) {
         s.send("chat@" + document.getElementById("room").value + "@" + document.getElementById("user").value + "@" + document.getElementById("chat").value);
     }
 }
+// Start of JB Together Code
+const s = new WebSocket("wss://multiboxwebsocket.onrender.com");
+
+s.onmessage = (e) => {
+    var recieved = "" + e.data;
+    console.log(recieved);
+    var encoded = recieved.split("@");
+
+    //functions
+    switch (encoded[0]) {
+        case "connected":
+            break;
+        case "getData":
+            updateHash();
+            break;
+        case "download":
+            if (window.location.hash !== encoded[1]) window.location.hash = encoded[1];
+            break;
+        case "broadcast":
+            //TODO: implement the broadcast function to communicate information like server joins and leaves.
+            document.getElementById("log").value = document.getElementById("log").value + encoded[1] + "\n";
+            break;
+    }
+};
+
+infoSent = false;
+function sendInfo() {
+    infoSent = true;
+    s.send("init@" + document.getElementById("room").value + "@" + document.getElementById("user").value);
+}
+
+function updateHash() {
+    console.log("hashdated");
+    s.send("upload@" + document.getElementById("room").value + "@" + document.getElementById("user").value + "@" + window.location.hash);
+}
+function disconnect() {
+    console.log("dc");
+    s.send("disconnect@" + document.getElementById("room").value + "@" + document.getElementById("user").value);
+}
+function chat() {
+    console.log("chat");
+    s.send("chat@" + document.getElementById("room").value + "@" + document.getElementById("user").value + "@" + document.getElementById("chat").value);
+}
+
+
+window.history.pushState = new Proxy(window.history.pushState, {
+    apply: (target, thisArg, argArray) => {
+        setTimeout(function () {
+            updateHash();
+        }, 10);
+        return target.apply(thisArg, argArray);
+    },
+});
+//END OF JUMM TOGETHER MODULE
     </script>
 <body onbeforeunload="disconnect()">
 
@@ -450,60 +504,7 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|android|ipad|
     document.getElementById("bar-editing").innerHTML = "Tap the other boxes to move to a different part of the song, or tap on the currently selected box to swap which pattern is played during that part of the song.";
     //document.getElementById("offline-instructions").innerHTML = 'You can use BeepBox when your device is offline if you put a shortcut to BeepBox on your home screen. <ul><li>Chrome: find the "Add to Home Screen" option in the ⋮ menu.</li><li>Firefox: find the "Add Page Shortcut" option in the ⋮ menu.</li><li>Safari: find the "Add to Home Screen" option in the bookmark menu.</li></ul>';
 }
-// Start of JB Together Code
-const s = new WebSocket("wss://multiboxwebsocket.onrender.com");
 
-s.onmessage = (e) => {
-    var recieved = "" + e.data;
-    console.log(recieved);
-    var encoded = recieved.split("@");
-
-    //functions
-    switch (encoded[0]) {
-        case "connected":
-            break;
-        case "getData":
-            updateHash();
-            break;
-        case "download":
-            if (window.location.hash !== encoded[1]) window.location.hash = encoded[1];
-            break;
-        case "broadcast":
-            //TODO: implement the broadcast function to communicate information like server joins and leaves.
-            document.getElementById("log").value = document.getElementById("log").value + encoded[1] + "\n";
-            break;
-    }
-};
-
-infoSent = false;
-function sendInfo() {
-    infoSent = true;
-    s.send("init@" + document.getElementById("room").value + "@" + document.getElementById("user").value);
-}
-
-function updateHash() {
-    console.log("hashdated");
-    s.send("upload@" + document.getElementById("room").value + "@" + document.getElementById("user").value + "@" + window.location.hash);
-}
-function disconnect() {
-    console.log("dc");
-    s.send("disconnect@" + document.getElementById("room").value + "@" + document.getElementById("user").value);
-}
-function chat() {
-    console.log("chat");
-    s.send("chat@" + document.getElementById("room").value + "@" + document.getElementById("user").value + "@" + document.getElementById("chat").value);
-}
-
-
-window.history.pushState = new Proxy(window.history.pushState, {
-    apply: (target, thisArg, argArray) => {
-        setTimeout(function () {
-            updateHash();
-        }, 10);
-        return target.apply(thisArg, argArray);
-    },
-});
-//END OF JUMM TOGETHER MODULE
 var beepbox = (function (t) {
     "use strict";
     /*!
